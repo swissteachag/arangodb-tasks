@@ -1,0 +1,36 @@
+{
+    "manifestVersion": 1,
+    "id": "ArangoDB-Insert-Documents",
+    "name": "ArangoDB Insert Documents",
+    "version": "0.1.7",
+    "publisher": "swissteach-ag",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],    
+    "description": "Create documents task for working with ArangoDB within pipelines",
+    "categories": [
+        "Azure Pipelines"
+    ],
+    "icons": {
+        "default": "images/extension-icon.png"        
+    },
+    "files": [
+        {
+            "path": "releasetask"
+        }
+    ],
+    "contributions": [
+        {
+            "id": "custom-build-release-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "releasetask"
+            }
+        }
+    ]
+}

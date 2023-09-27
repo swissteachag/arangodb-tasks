@@ -1,0 +1,90 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "ca23a107-2f28-4b59-8836-cf693617ab06",
+    "name": "ArangoDB-Insert-Documents",
+    "friendlyName": "ArangoDB Insert Documents",
+    "description": "Small task to insert documents into an ArangoDB collection",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Guido Walter (Swissteach AG)",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 7
+    },
+    "instanceNameFormat": "ArangoDB Insert Documents",
+    "inputs": [
+        {
+            "name": "arangobbServer",
+            "type": "string",
+            "label": "ArangoDb Server URL or IP:Port",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The URL for the REST API call to ArangoDB"
+        },
+        {
+            "name": "username",
+            "type": "string",
+            "label": "Username for ArangoDB",
+            "isConfidential": true,            
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "ArangoDB Username for the REST API call to ArangoDB"
+        },
+        {
+            "name": "password",
+            "type": "string",
+            "label": "Password for ArangoDB",
+            "inputMode": "passwordbox",
+            "isConfidential": true,            
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "ArangoDB Password for the REST API call to ArangoDB"
+        },
+        {
+            "name": "databseName",
+            "type": "string",
+            "label": "ArangoDB Database",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "ArangoDb database to work with"
+        },
+        {
+            "name": "collectioneName",
+            "type": "string",
+            "label": "ArangoDB Collection",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "ArangoDB collection to work with"
+        },
+        {
+            "name": "dropDocuments",
+            "type": "boolean",
+            "label": "Drop all documents in collection",
+            "defaultValue": false,
+            "required": false,
+            "helpMarkDown": "Select, if you want to drop all documents in the collection before inserting new ones"
+        },
+        {
+            "name": "sourceFolder",
+            "type": "filePath",
+            "label": "Source Folder",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The source folder where to find the documents in JSON format. Example: $(agent.builddirectory)"
+        },
+        {
+            "name": "contents",
+            "type": "multiLine",
+            "label": "Contents",
+            "defaultValue": "**",
+            "required": true,
+            "helpMarkDown": "File paths to include. Example *.json)"
+        }
+    ],
+    "execution": {
+        "Node": {
+            "target": "index.js"
+        }
+    }
+}
