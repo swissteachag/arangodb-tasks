@@ -19,13 +19,13 @@ const fs_1 = require("fs");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const requiredVersion = '20'; // specify the required major version
+            const requiredVersion = '18'; // specify the required major version
             const currentVersion = process.versions.node.split('.')[0];
             if (currentVersion !== requiredVersion) {
                 console.error(`Error: Custom task requires Node.js version ${requiredVersion}, but current version is ${currentVersion}.`);
                 process.exit(1);
             }
-            const baseURL = tl.getInput('arangobbServer', true);
+            const baseURL = tl.getInput('arangoDbServer', true);
             const username = tl.getInput('username', true);
             const password = tl.getInput('password', true);
             const database = tl.getInput('database', true);
