@@ -6,7 +6,7 @@ import { readFileSync, readdirSync } from 'fs';
 async function run() {
     try {
         
-        const requiredVersion = '20'; // specify the required major version
+        const requiredVersion = '18'; // specify the required major version
         const currentVersion = process.versions.node.split('.')[0];
         
         if (currentVersion !== requiredVersion) {
@@ -15,7 +15,7 @@ async function run() {
         }
 
 
-        const baseURL: string | undefined = tl.getInput('arangobbServer', true);
+        const baseURL: string | undefined = tl.getInput('arangoDbServer', true);
         const username: string | undefined = tl.getInput('username', true);
         const password: string | undefined = tl.getInput('password', true);
         const database: string | undefined = tl.getInput('database', true);

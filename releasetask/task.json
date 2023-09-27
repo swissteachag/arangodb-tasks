@@ -15,7 +15,7 @@
     "instanceNameFormat": "ArangoDB Insert Documents",
     "inputs": [
         {
-            "name": "arangobbServer",
+            "name": "arangoDbServer",
             "type": "string",
             "label": "ArangoDb Server URL or IP:Port",
             "defaultValue": "",
@@ -42,7 +42,7 @@
             "helpMarkDown": "ArangoDB Password for the REST API call to ArangoDB"
         },
         {
-            "name": "databseName",
+            "name": "database",
             "type": "string",
             "label": "ArangoDB Database",
             "defaultValue": "",
