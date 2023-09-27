@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "ArangoDB-Insert-Documents",
     "name": "ArangoDB Insert Documents",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "publisher": "swissteach-ag",
     "targets": [
         {
