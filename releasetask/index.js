@@ -14,24 +14,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const tl = require("azure-pipelines-task-lib/task");
 const axios_1 = __importDefault(require("axios"));
-const process = require("process");
 const fs_1 = require("fs");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const requiredVersion = '18'; // specify the required major version
-            const currentVersion = process.versions.node.split('.')[0];
-            if (currentVersion !== requiredVersion) {
-                console.error(`Error: Custom task requires Node.js version ${requiredVersion}, but current version is ${currentVersion}.`);
-                process.exit(1);
-            }
+            // Get inputs ==================================================================       
             const baseURL = tl.getInput('arangoDbServer', true);
             const username = tl.getInput('username', true);
             const password = tl.getInput('password', true);
             const database = tl.getInput('database', true);
-            const collection = tl.getInput('collection', true);
+            const collection = tl.getInput('collectioneName', true);
             const dropDocuments = tl.getBoolInput('dropDocuments', true);
-            const soureFolder = tl.getInput('soureFolder', true);
+            const sourceFolder = tl.getInput('sourceFolder', true);
             const contents = tl.getInput('contents', true);
             if (!baseURL) {
                 tl.setResult(tl.TaskResult.Failed, 'Base URL is required');
@@ -53,7 +47,7 @@ function run() {
                 tl.setResult(tl.TaskResult.Failed, 'Collection is required');
                 return;
             }
-            if (!soureFolder) {
+            if (!sourceFolder) {
                 tl.setResult(tl.TaskResult.Failed, 'Source folder is required');
                 return;
             }
@@ -115,13 +109,11 @@ function run() {
             }
             // ================================================================================
             // Read and create documents ======================================================
-            const file = (0, fs_1.readdirSync)(soureFolder).filter((allFilesPaths) => allFilesPaths.match(RegExp("\\" + contents + "$")) !== null);
+            const file = (0, fs_1.readdirSync)(sourceFolder).filter((allFilesPaths) => allFilesPaths.match(RegExp("\\" + contents + "$")) !== null);
             for (const docfile of file) {
                 try {
-                    const fileContents = (0, fs_1.readFileSync)(soureFolder + docfile, 'utf8');
-                    const createdoc_response = yield axios_1.default.post(baseURL + '/' + database + '/_api/document/' + collection, {
-                        "contents": JSON.parse(fileContents)
-                    }, axiosconfig);
+                    const fileContents = (0, fs_1.readFileSync)(sourceFolder + docfile, 'utf8');
+                    const createdoc_response = yield axios_1.default.post(baseURL + '/' + database + '/_api/document/' + collection, JSON.parse(fileContents), axiosconfig);
                     console.log(createdoc_response);
                 }
                 catch (err) {
