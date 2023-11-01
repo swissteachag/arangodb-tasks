@@ -27,6 +27,7 @@ function run() {
             const dropDocuments = tl.getBoolInput('dropDocuments', true);
             const sourceFolder = tl.getInput('sourceFolder', true);
             const contents = tl.getInput('contents', true);
+            const keyName = tl.getInput('keyName', false);
             if (!baseURL) {
                 tl.setResult(tl.TaskResult.Failed, 'Base URL is required');
                 return;
@@ -109,12 +110,20 @@ function run() {
             }
             // ================================================================================
             // Read and create documents ======================================================
+            let requestbody;
             const file = (0, fs_1.readdirSync)(sourceFolder).filter((allFilesPaths) => allFilesPaths.match(RegExp("\\" + contents + "$")) !== null);
             for (const docfile of file) {
                 try {
                     const fileContents = (0, fs_1.readFileSync)(sourceFolder + docfile, 'utf8');
-                    const createdoc_response = yield axios_1.default.post(baseURL + '/' + database + '/_api/document/' + collection, JSON.parse(fileContents), axiosconfig);
-                    console.log(createdoc_response);
+                    if (keyName == null) {
+                        requestbody = JSON.parse(fileContents);
+                    }
+                    else {
+                        requestbody = JSON.parse(fileContents);
+                        requestbody._key = JSON.parse(fileContents)[keyName];
+                    }
+                    const createdoc_response = yield axios_1.default.post(baseURL + '/' + database + '/_api/document/' + collection, requestbody, axiosconfig);
+                    console.log(`Document creation status: ${createdoc_response.status}`);
                 }
                 catch (err) {
                     tl.setResult(tl.TaskResult.Failed, err.message);

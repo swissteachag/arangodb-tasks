@@ -14,6 +14,7 @@ async function run() {
         const dropDocuments: boolean | undefined = tl.getBoolInput('dropDocuments', true);
         const sourceFolder: string | undefined = tl.getInput('sourceFolder', true);
         const contents: string | undefined = tl.getInput('contents', true);
+        const keyName: string | undefined = tl.getInput('keyName', false);
 
         if (!baseURL) {
             tl.setResult(tl.TaskResult.Failed, 'Base URL is required');
@@ -83,7 +84,7 @@ async function run() {
             tl.setResult(tl.TaskResult.Failed, 'No response from server');
             return;        
         };
-
+        
         // ================================================================================
 
         // Delete documents if dropDocuments is set to true ===============================
@@ -105,20 +106,27 @@ async function run() {
         // ================================================================================
 
         // Read and create documents ======================================================
+        let requestbody;
         const file = readdirSync(sourceFolder).filter((allFilesPaths:string) => 
         allFilesPaths.match(RegExp("\\" + contents + "$")) !== null);
 
         for (const docfile of file) {
             try {
                 const fileContents = readFileSync(sourceFolder + docfile, 'utf8');
+                if (keyName == null) {
+                    requestbody = JSON.parse(fileContents);
+                }
+                else {
+                    requestbody = JSON.parse(fileContents);
+                    requestbody._key = JSON.parse(fileContents)[keyName];
+                }
+
                 const createdoc_response = await axios.post(
-                    baseURL + '/' + database + '/_api/document/' + collection,
-                    JSON.parse(fileContents),
-                    axiosconfig
+                    baseURL + '/' + database + '/_api/document/' + collection, requestbody, axiosconfig
                 );
 
-                console.log(createdoc_response);
-                
+                console.log(`Document creation status: ${createdoc_response.status}`);
+               
             } catch (err) {
                 tl.setResult(tl.TaskResult.Failed, (err as Error).message);
             }
